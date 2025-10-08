@@ -9,8 +9,10 @@ const app = express();
 // ✅ Middleware
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://127.0.0.1:3000"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: [
+      "http://localhost:3000",
+      "https://to-do-list-nattapoom.netlify.app", 
+    ],    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
@@ -19,10 +21,10 @@ app.use(cookieParser());
 
 // ✅ Database Connection
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "to-do-list",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
 });
 
 // ✅ Register
@@ -259,4 +261,6 @@ app.get("/tasks/search/:listId", (req, res) => {
 });
 
 // ✅ Start server
-app.listen(8081, () => console.log("✅ Server running on port 8081"));
+const PORT = process.env.PORT || 8081;
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+
